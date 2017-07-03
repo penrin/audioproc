@@ -3,8 +3,8 @@ import numpy as np
 import wave
 
 
-def readwav(file):
-    wr = wave.open(file, 'r')
+def readwav(filename):
+    wr = wave.open(filename, 'r')
     params = wr.getparams()
     nchannels = params[0]
     sampwidth = params[1]
@@ -51,7 +51,7 @@ def writewav(filename, data, ws=3, fs=48000):
     elif sampwidth == 4:
         frames = data.astype(np.int32).tostring()
     
-    w = wave.open(file, 'wb')
+    w = wave.open(filename, 'wb')
     w.setparams((nchannels, sampwidth, fs, 0, 'NONE', 'not compressed'))
     w.writeframes(frames)
     w.close()

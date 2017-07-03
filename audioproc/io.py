@@ -35,7 +35,7 @@ def readwav(filename):
 
 
 def writewav(filename, data, ws=3, fs=48000):
-    nchannels = data.size / len(data)
+    nchannels = data.shape[1]
     sampwidth = ws
     data = (data * (2 ** (8 * sampwidth - 1) - 1)).reshape(data.size, 1)
     

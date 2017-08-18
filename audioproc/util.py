@@ -14,3 +14,7 @@ def progressbar(percent, end=1, bar_length=40, slug='#', space='-'):
     if percent == 1:
         print()
 
+
+def id(x):
+    # 配列のメモリブロックアドレスを返す
+    return x.__array__interface__['data'][0]

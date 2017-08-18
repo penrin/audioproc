@@ -28,17 +28,3 @@ $ sudo pip install -U git+https://github.com/penrin/audioproc.git
 $ sudo pip uninstall audioproc
 ```
 
-使用例
------
-
-### インパルス応答計測 (Swept Sine)
-
-- 測定信号生成
-
-```
-```
-
-- IR 算出
-
-```
-```

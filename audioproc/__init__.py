@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from . import io
-from . import util
+from .io import *
+from .util import *
 from .signal import *
 

@@ -1,5 +1,7 @@
 # coding: utf-8
 import numpy as np
+from scipy.signal import get_window
+from scipy.signal import fftconvolve
 
 
 # generate swept-sine signal
@@ -40,4 +42,34 @@ def fftacorr(x):
     c = np.fft.irfft(np.conj(X) * X)
     return c
 
+
+# L times upsample for fixed sample rate signal
+def upsample(x, K, N, window='hamming'):
+    '''
+    Parameters
+    ----------
+    K: int
+        The multiple of upsampling.
+    N: int
+        The number of taps of interpolation function.
+        The longer this number, the higher the accuracy,
+        but the higher the calculation load.
+    window : string or tuple of string and parameter values
+        Desired window to use. See `scipy.signal.get_window` for a list
+        of windows and required parameters.
+    '''
+    
+    if type(K) != int:
+        print('Only integer multiples please.')
+    
+    # upsample
+    x_upsamp = np.zeros((x.shape[0] - 1) * K + 1)
+    x_upsamp[::K] = x[:]
+
+    # LPF
+    n = np.arange(N) - (N - 1) / 2
+    w = get_window(window, N)
+    LPF = w * np.sinc(n / K)
+    y = fftconvolve(x_upsamp, LPF)
+    return y
 

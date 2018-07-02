@@ -43,6 +43,16 @@ def fftacorr(x):
     return c
 
 
+# Cross-correlation function (returned with lag time)
+def xcorr(x, y):
+    fftpoint = 2 ** nextpow2(len(x) + len(y) - 1)
+    X = np.fft.rfft(x[::-1], n=fftpoint)
+    Y = np.fft.rfft(y, n=fftpoint)
+    cf = np.fft.irfft(X * Y)[:len(x) + len(y) - 1]
+    n_axis = np.arange(len(x) + len(y) - 1) - len(x) + 1
+    return n_axis, cf
+
+
 # L times upsample for fixed sample rate signal
 def upsample(x, K, N, window='hamming'):
     '''

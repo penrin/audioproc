@@ -20,9 +20,7 @@ def gentsp(n=18):
 
 # Exponent of next higher power of 2
 def nextpow2(n):
-    l = np.ceil(np.log2(n))
-    m = int(np.log2(2 ** l))
-    return m
+    return int(np.ceil(np.log2(n)))
 
 
 # Cross-correlation function

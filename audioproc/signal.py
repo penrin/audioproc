@@ -81,3 +81,16 @@ def upsample(x, K, N, window='hamming'):
     y = fftconvolve(x_upsamp, LPF)
     return y
 
+
+# amplitude limiter
+def limiter(signal, threshold, deepcopy=True):
+    if deepcopy:
+        s = np.copy(signal)
+    else:
+        s = signal
+    index = np.where(np.abs(s) > np.abs(threshold))
+    s[index] = np.sign(s[index]) * np.abs(threshold)
+    return s
+
+
+

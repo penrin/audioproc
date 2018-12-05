@@ -20,11 +20,10 @@ def readwav(filename):
     elif sampwidth == 2:
         data = np.frombuffer(frames, dtype=np.int16)
     elif sampwidth == 3:
-        a8 = np.fromstring(frames, dtype=np.uint8)
-        tmp = np.empty((nframes, nchannels, 4), dtype = np.uint8)
-        tmp[:, :, :sampwidth] = a8.reshape(-1, nchannels, sampwidth)
-        tmp[:, :, sampwidth:] = (tmp[:, :, sampwidth - 1:sampwidth] >> 7) * 255
-        data = tmp.view('int32')
+        a8 = np.frombuffer(frames, dtype=np.uint8)
+        tmp = np.empty((nframes * nchannels, 4), dtype=np.uint8)
+        tmp[:, 1:] = a8.reshape(-1, 3)
+        data = tmp.view(np.int32)[:, 0] >> 8
     elif sampwidth == 4:
         data = np.frombuffer(frames, dtype=np.int32)
     

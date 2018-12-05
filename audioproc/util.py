@@ -17,4 +17,4 @@ def progressbar(percent, end=1, bar_length=40, slug='#', space='-'):
 
 def id(x):
     # 配列のメモリブロックアドレスを返す
-    return x.__array__interface__['data'][0]
+    return x.__array_interface__['data'][0]

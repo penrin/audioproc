@@ -30,10 +30,10 @@ def readwav(filename):
     return rate, data
 
 
-def writewav(filename, data, ws=3, fs=48000):
+def writewav(filename, data, ws=3, fs=48000, e=-1):
     nchannels = data.shape[1]
     sampwidth = ws
-    data = (data * (2 ** (8 * sampwidth - 1) - 1)).reshape(data.size, 1)
+    data = (data * (2 ** (8 * sampwidth - 1) - e)).reshape(data.size, 1)
     
     if sampwidth == 1:
         data = data + 128

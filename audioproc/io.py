@@ -13,22 +13,19 @@ def readwav(filename):
     frames = wr.readframes(nframes)
     wr.close()
 
-    # binary -> int
     if sampwidth == 1:
         data = np.frombuffer(frames, dtype=np.uint8)
-        data = data - 128
+        data = (data - 128) / 128
     elif sampwidth == 2:
-        data = np.frombuffer(frames, dtype=np.int16)
+        data = np.frombuffer(frames, dtype=np.int16) / 32768
     elif sampwidth == 3:
         a8 = np.frombuffer(frames, dtype=np.uint8)
-        tmp = np.empty((nframes * nchannels, 4), dtype=np.uint8)
+        tmp = np.zeros((nframes * nchannels, 4), dtype=np.uint8)
         tmp[:, 1:] = a8.reshape(-1, 3)
-        data = tmp.view(np.int32)[:, 0] >> 8
+        data = tmp.view(np.int32)[:, 0] / 2147483648
     elif sampwidth == 4:
-        data = np.frombuffer(frames, dtype=np.int32)
+        data = np.frombuffer(frames, dtype=np.int32) / 2147483648
     
-    # Mold: numpy array (nframes, nchannels), -1.0 ≤ sample < 1.0
-    data = data.astype(float) / 2 ** (8 * sampwidth - 1)
     data = np.reshape(data, (-1, nchannels))
     return rate, data
 

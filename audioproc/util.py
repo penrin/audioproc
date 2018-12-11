@@ -1,5 +1,7 @@
 # coding: utf-8
 import sys
+import time
+
 
 
 def progressbar(percent, end=1, bar_length=40, slug='#', space='-'):
@@ -42,7 +44,7 @@ class ProgressBar():
                 remain_t =  (elapsed_time / progress) * (1 - percent)
                 h = remain_t // 3600
                 m = remain_t % 3600 // 60
-                s = np.ceil(remain_t % 60)
+                s = remain_t % 60
                 remain = 'Remain %02d:%02d:%02d' % (h, m, s) 
         else:
             remain = ''

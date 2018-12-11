@@ -20,17 +20,16 @@ def progressbar(percent, end=1, bar_length=40, slug='#', space='-'):
 
 class ProgressBar():
 
-    def __init__(self, bar_length=40, slug='#', space='-', tail='', countdown=True):
+    def __init__(self, bar_length=40, slug='#', space='-', countdown=True):
 
         self.bar_length = bar_length
         self.slug = slug
         self.space = space
-        self.tail = tail
         self.countdown = countdown
         self.start_time = None
     
     
-    def bar(self, percent, end=1):
+    def bar(self, percent, end=1, tail=''):
         percent = percent / end
 
         if self.countdown == True:

@@ -53,7 +53,7 @@ class ProgressBar():
         spaces = self.space * (self.bar_length - len_slugs)
         txt = '\r[{bar}] {percent:.1%} {remain} {tail}'.format(
                 bar=(slugs + spaces), percent=percent,
-                remain=remain, tail=self.tail)
+                remain=remain, tail=tail)
         if percent == 1:
             txt += '\n'
             self.start_time = None

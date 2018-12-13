@@ -22,6 +22,23 @@ def acn_index(N):
     return n_list, m_list
 
 
+
+def hv_index(H, V):
+    '''
+    return n & m of #H#V Mixed-order Ambisonics
+    
+    Chris Travis, "A New Mixed-order Scheme for Ambisonics signals",
+    Ambisonics Symposium 2009
+    '''
+    n_tmp, m_tmp = acn_index(H)
+    v = n_tmp - np.abs(m_tmp)
+    i = np.where(v <= V)[0]
+    n_list = np.copy(n_tmp[i])
+    m_list = np.copy(m_tmp[i])
+    return n_list, m_list
+
+
+
 def sph_harm_realvalued(m, n, theta, phi): 
     if m < 0:
         Y = np.sqrt(2) * (-1) * np.imag(sph_harm(m, n, theta, phi))

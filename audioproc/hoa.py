@@ -67,12 +67,20 @@ class EncodeMatrix:
         self.alpha = alpha
         return
 
-    def encodematrix(self, order, wavenum):
+
+    def hoa_encodematrix(self, order, wavenum):
+        n, m = acn_index(order)
+        return self.encodematrix(n, m, wavenum)
+
+    def moa_encodematrix(self, H, V, wavenum):
+        n, m = hv_index(H, V)
+        return self.encodematrix(n, m, wavenum)
+
+
+    def encodematrix(self, n, m, wavenum):
 
         print('Calc. encode matrix')
 
-        n, m = acn_index(order)
-        
         # reshape
         r_ = self.r.reshape(-1, 1, 1)
         theta_ = self.theta.reshape(-1, 1, 1)
@@ -115,28 +123,35 @@ class DecodeMatrix:
         self.theta = np.arctan2(y, x)
         self.phi = np.arctan2(np.sqrt(x ** 2 + y ** 2), z)
         return
-
-    def decodematrix(self, order, wavenum, nearfieldmodel=False):
-        if nearfieldmodel:
-            Dec = self._decodematrix_nearfield(order, wavenum)
-        else:
-            Dec = self._decodematrix_planewave(order, wavenum)
-        return Dec
     
-    def _decodematrix_planewave(self, order, wavenum):
 
-        print('Calc. decode matrix (plane wave model)')
+    def decodematrix(self, n, m, wavenum, nearfieldmodel=False):
+        if nearfieldmodel:
+            Dec = self._decodematrix_nearfield(n, m, wavenum)
+        else:
+            Dec = self._decodematrix_planewave(n, m, wavenum)
+        return Dec
+
+
+    def hoa_decodematrix(self, order, wavenum, nearfieldmodel=False):
         n, m = acn_index(order)
-        
+        return self.decodematrix(n, m, wavenum, nearfieldmodel)
+
+
+    def hv_decodematrix(self, H, V, wavenum, nearfieldmodel=False):
+        n, m = hv_index(H, V)
+        return self.decodematrix(n, m, wavenum, nearfieldmodel)
+    
+
+    def _decodematrix_planewave(self, n, m, wavenum):
+        print('Calc. decode matrix (plane wave model)')    
         print('Not yet support nearfieldmodel=False')
-        
         return
 
 
-    def _decodematrix_nearfield(self, order, wavenum):
+    def _decodematrix_nearfield(self, n, m, wavenum):
 
         print('Calc. decode matrix (near field model)')
-        n, m = acn_index(order)
 
         # reshape
         r_ = self.r.reshape(1, -1, 1)
@@ -161,5 +176,8 @@ class DecodeMatrix:
         ap.progressbar(1)
 
         return Dec
+    
+    
+
 
 

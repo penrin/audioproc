@@ -72,7 +72,7 @@ class EncodeMatrix:
         n, m = acn_index(order)
         return self.encodematrix(n, m, wavenum)
 
-    def moa_encodematrix(self, H, V, wavenum):
+    def hv_encodematrix(self, H, V, wavenum):
         n, m = hv_index(H, V)
         return self.encodematrix(n, m, wavenum)
 

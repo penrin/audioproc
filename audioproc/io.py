@@ -3,6 +3,14 @@ import numpy as np
 import wave
 
 
+def wavshape(filename):
+    wr = wave.open(filename, 'r')
+    nchannels = wr.getnchannels()
+    nframes =  wr.getnframes()
+    wr.close()
+    return nframes, nchannels
+
+
 def readwav(filename):
     wr = wave.open(filename, 'r')
     params = wr.getparams()

@@ -23,6 +23,26 @@ def nextpow2(n):
     return int(np.ceil(np.log2(n)))
 
 
+# The maximum absolute value
+def absmax(x, axis=None):
+    return np.max(np.abs(x), axis=axis)
+
+
+# The argument of the maximum absolute value
+def argabsmax(x, axis=None):
+    return np.argmax(np.abs(x), axis=axis)
+
+
+# The minimum absolute value
+def absmin(x, axis=None):
+    return np.min(np.abs(x), axis=axis)
+
+
+# The argument of the minimum absolute value
+def argabsmin(x, axis=None):
+    return np.argmin(np.abs(x), axis=axis)
+
+
 # Cross-correlation function
 def fftxcorr(x, y):
     # Rxy = E[x(n) y(n + m)]

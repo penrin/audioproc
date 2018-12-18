@@ -27,17 +27,20 @@ class ProgressBar():
         self.space = space
         self.countdown = countdown
         self.start_time = None
-    
+        self.start_parcent = 0
     
     def bar(self, percent, end=1, tail=''):
         percent = percent / end
 
         if self.countdown == True:
+            progress = percent - self.start_parcent
             if self.start_time == None:
                 self.start_time = time.perf_counter()
                 self.start_parcent = percent
                 remain = 'Remain --:--:--'
-            else:
+            elif progress == 0:
+                remain = 'Remain --:--:--'
+            if progress != 0:
                 elapsed_time = time.perf_counter() - self.start_time
                 progress = percent - self.start_parcent
                 remain_t =  (elapsed_time / progress) * (1 - percent)
@@ -45,6 +48,7 @@ class ProgressBar():
                 m = remain_t % 3600 // 60
                 s = remain_t % 60
                 remain = 'Remain %02d:%02d:%02d' % (h, m, s) 
+                
         else:
             remain = ''
         

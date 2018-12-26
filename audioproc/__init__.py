@@ -3,5 +3,6 @@
 from .io import *
 from .util import *
 from .signal import *
+from .sweep import *
 from .bandanalysis import *
 from . import hoa

@@ -1,7 +1,7 @@
 # coding: utf-8
 import sys
 import time
-
+from math import ceil
 
 
 def progressbar(percent, end=1, bar_length=40, slug='#', space='-'):
@@ -34,16 +34,20 @@ class ProgressBar():
 
         if self.countdown == True:
             progress = percent - self.start_parcent
+            
             if self.start_time == None:
                 self.start_time = time.perf_counter()
                 self.start_parcent = percent
                 remain = 'Remain --:--:--'
+                
             elif progress == 0:
                 remain = 'Remain --:--:--'
-            if progress != 0:
+            
+            elif progress != 0:
                 elapsed_time = time.perf_counter() - self.start_time
                 progress = percent - self.start_parcent
-                remain_t =  (elapsed_time / progress) * (1 - percent)
+                remain_t = (elapsed_time / progress) * (1 - percent)
+                remain_t = ceil(remain_t)
                 h = remain_t // 3600
                 m = remain_t % 3600 // 60
                 s = remain_t % 60

@@ -90,7 +90,7 @@ class EncodeMatrix:
         k_ = np.array(wavenum).reshape(1, 1, -1)
 
         # spherical bessel function matrix
-        if self.alpha == 1:
+        if (self.alpha == np.array([1])).all():
             J = spherical_jn(n_, k_ * r_)
         else:
             J = self.alpha * spherical_jn(n_, k_ * r_)\

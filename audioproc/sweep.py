@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 応答と逆特性の直線状畳み込みにも対応。
-逆特性は自分で作ること。
+逆特性は自分で作ること。-> np.fft.irfft(1 / np.fft.rfft(sweep))
 
 ------
 使い方 
@@ -112,6 +112,10 @@ def gen_sweep(N, J, magnitude_dB, envelope_dB, plot=False, downward=False):
         #plt.show()
         
     return ss
+
+
+def inverse_sweep(sweep):
+    return np.fft.irfft(1 / np.fft.rfft(sweep))
 
 
 

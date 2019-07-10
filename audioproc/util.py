@@ -69,7 +69,32 @@ class ProgressBar():
         sys.stdout.flush()
         
 
+class ProgressBar2(ProgressBar):
+
+    def __init__(self, end, bar_length=40, slug='#', space='-', countdown=True):
+        
+        super().__init__(bar_length=40, slug='#', space='-', countdown=True)
+        self.counter = 0
+        self.end = end
+        
+    def bar(self, tail=''):
+        super().bar(self.counter, end=self.end, tail='')
+        self.counter += 1
+        
 
 def id(x):
     # 配列のメモリブロックアドレスを返す
     return x.__array_interface__['data'][0]
+
+
+
+
+
+if __name__ == '__main__':
+    
+    N = 100
+    pg = ProgressBar2(N)
+    for n in range(N):    
+        time.sleep(0.02)
+        pg.bar()
+        

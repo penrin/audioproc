@@ -2,6 +2,7 @@
 import sys
 import time
 from math import ceil
+import threading
 
 
 def progressbar(percent, end=1, bar_length=40, slug='#', space='-'):
@@ -83,6 +84,38 @@ class ProgressBar2(ProgressBar):
         self.counter += 1
         
 
+        
+class Propeller:
+    
+    def __init__(self, charlist=None, sleep=0.1):
+        if charlist is None:
+            self.charlist = ['|', '/', '-', '\\']
+        self.sleep = sleep
+        self.working = True    
+
+    def progress(self):
+        N = len(self.charlist)
+        i = 0
+        sys.stdout.write(' ')
+        while self.working:
+            sys.stdout.write('\b' + self.charlist[i])
+            sys.stdout.flush()
+            time.sleep(self.sleep)
+            i = (i + 1) % N
+        sys.stdout.write('\b' + 'done')
+        sys.stdout.flush()
+        
+    def start(self):
+        self.working = True
+        self.thread = threading.Thread(target=self.progress)
+        self.thread.start()
+        
+    def end(self):
+        self.working = False
+        self.thread.join()
+        
+
+
 def id(x):
     # 配列のメモリブロックアドレスを返す
     return x.__array_interface__['data'][0]
@@ -98,4 +131,12 @@ if __name__ == '__main__':
     for n in range(N):    
         time.sleep(0.02)
         pg.bar()
+    
+    print()
+    print('Propeller...', end='')
+    p = Propeller()
+    p.start()
+    time.sleep(3)
+    p.end()
+    
         

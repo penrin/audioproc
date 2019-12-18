@@ -80,7 +80,7 @@ class ProgressBar2(ProgressBar):
         self.bar()
         
     def bar(self, tail=''):
-        super().bar(self.counter, end=self.end, tail='')
+        super().bar(self.counter, end=self.end, tail=tail)
         self.counter += 1
         
 

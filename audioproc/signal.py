@@ -2,6 +2,7 @@
 import numpy as np
 from scipy.signal import get_window
 from scipy.signal import fftconvolve
+import audioproc as ap
 
 
 # generate swept-sine signal

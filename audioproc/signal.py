@@ -136,6 +136,7 @@ def conv_lessmemory(longinput, fir, fftpoint, varbose=False):
         raise Exception('fftpoint must be more than %d' % M)
 
     fir_f = np.fft.rfft(fir, n=N)
+    del fir
     
     block_in = np.empty([n_input, 1, N])
     block_in[:, 0, L:] = 0.

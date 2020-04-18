@@ -74,7 +74,7 @@ class ProgressBar2(ProgressBar):
 
     def __init__(self, end, bar_length=40, slug='#', space='-', countdown=True):
         
-        super().__init__(bar_length=40, slug='#', space='-', countdown=True)
+        super().__init__(bar_length, slug, space, countdown)
         self.counter = 0
         self.end = end
         self.bar()

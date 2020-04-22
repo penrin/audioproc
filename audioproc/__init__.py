@@ -5,4 +5,5 @@ from .util import *
 from .signal import *
 from .sweep import *
 from .bandanalysis import *
+from .roomacoustics import *
 from . import hoa

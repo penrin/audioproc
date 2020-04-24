@@ -3,8 +3,8 @@ import numpy as np
 import audioproc as ap
 
 
-def calc_decaycurve(ir):
-    decay = 10 * np.log10(np.flip(np.cumsum(np.flip(ir) ** 2)))
+def calc_decaycurve(ir, inf=-1):
+    decay = 10 * np.log10(np.flip(np.cumsum(np.flip(ir[:inf]) ** 2)))
     decay -= decay[0]
     return decay
 

@@ -71,16 +71,3 @@ def calc_RT(decaycurve, att1=5, att2=35, fs=48000):
     return RT, SD
 
 
-def calc_clarity(ir, msec=80, fs=48000):
-    p_sq = ir ** 2
-    i0 = np.argmax(p_sq)
-    i1 = i0 + int(fs * msec / 1000)
-    return 10 * np.log10(np.sum(p_sq[i0:i1]) / np.sum(p_sq[i1:]))
-
-
-def calc_deutlichkeit(ir, msec=50, fs=48000):
-    p_sq = ir ** 2
-    i0 = np.argmax(p_sq)
-    i1 = i0 + int(fs * msec / 1000)
-    return np.sum(p_sq[i0:i1]) / np.sum(p_sq)
-    

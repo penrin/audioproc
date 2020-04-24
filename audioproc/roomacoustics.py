@@ -71,3 +71,18 @@ def calc_RT(decaycurve, att1=5, att2=35, fs=48000):
     return RT, SD
 
 
+def arg_arrival(ir, trigger=-20):
+    '''
+    detects direct sound arrival time.
+    The threshold is "trigger" smaller than the peak of IR.
+    '''
+    if trigger > 0:
+        raise Exception('trigger > 0')
+    p_abs = np.abs(ir)
+    i_peak = np.argmax(p_abs)
+    threshold = p_abs[i_peak] * 10 ** (trigger / 20)
+    i = 0
+    while p_abs[i] < threshold:
+        i += 1
+    return i
+

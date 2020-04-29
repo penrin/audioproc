@@ -81,8 +81,7 @@ def arg_arrival(ir, trigger=-20):
     p_abs = np.abs(ir)
     i_peak = np.argmax(p_abs)
     threshold = p_abs[i_peak] * 10 ** (trigger / 20)
-    i = 0
-    while p_abs[i] < threshold:
-        i += 1
+    i = np.where(p_abs[:i_peak + 1] >= threshold)[0][0]
     return i
+
 

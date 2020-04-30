@@ -116,7 +116,7 @@ def limiter(signal, threshold, deepcopy=True):
 
 # convolution using overlap-save method
 # with low memory consumption for long input
-def conv_lessmemory(longinput, fir, fftpoint, varbose=False):
+def conv_lessmemory(longinput, fir, fftpoint, verbose=False):
     len_input = longinput.shape[-1]
     M = fir.shape[-1]
     N = fftpoint
@@ -148,7 +148,7 @@ def conv_lessmemory(longinput, fir, fftpoint, varbose=False):
     out_cnt = 0
     nblocks = int(np.ceil(len_out / L))
     
-    if varbose:
+    if verbose:
         print('fftpoint:%d, ' % N, end='')
         print('blocksize:%d, ' % L, end='')
         print('nblocks:%d' % nblocks)
@@ -184,7 +184,7 @@ def conv_lessmemory(longinput, fir, fftpoint, varbose=False):
             out[:, out_cnt:] = block_out[:, :len_out - out_cnt]
             out_cnt = len_out
 
-        if varbose:
+        if verbose:
             pg.bar()
     
     return out

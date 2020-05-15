@@ -190,3 +190,84 @@ def conv_lessmemory(longinput, fir, fftpoint, verbose=False):
     return out
 
 
+
+# convolution using overlap-save method
+# with low memory consumption for long input (Frequency-domain FIR version)
+#
+# longinput: time-domain
+# rfft_fir : freq-domain (by np.fft.rfft that fftpoint have to be even number)
+# ntaps_fir: length of FIR in time-domain
+#
+def conv_lessmemory_fdomfir(longinput, rfft_fir, ntaps_fir, verbose=False):
+    len_input = longinput.shape[-1]
+    M = ntaps_fir
+    N = 2 * rfft_fir.shape[-1] - 2 # original N is an even number
+    L = N - (M - 1)
+
+    if longinput.ndim != 2:
+        raise Exception('longinput must be 2 dim')
+    if rfft_fir.ndim != 3:
+        raise Exception('fir must be 3 dim')
+    if longinput.shape[0] != rfft_fir.shape[1]:
+        raise Exception('fir shape does not match input')
+
+    n_input = longinput.shape[0]
+    n_output = rfft_fir.shape[0]
+
+    if L < 1:
+        raise Exception('fftpoint must be more than %d' % M)
+
+    fir_f = rfft_fir
+    
+    block_in = np.empty([n_input, 1, N])
+    block_in[:, 0, L:] = 0.
+    
+    point_read = 0
+
+    len_out = len_input + M - 1
+    out = np.empty([n_output, len_out])
+    out_cnt = 0
+    nblocks = int(np.ceil(len_out / L))
+    
+    if verbose:
+        print('fftpoint:%d, ' % N, end='')
+        print('blocksize:%d, ' % L, end='')
+        print('nblocks:%d' % nblocks)
+        pg = ap.ProgressBar2(nblocks, slug='=', space=' ')
+
+    for l in range(nblocks):
+        
+        # overlap
+        block_in[:, 0, :-L] = block_in[:, 0, L:]
+        
+        # read input
+        if (len_input - point_read) >= L:
+            block_in[:, 0, -L:] = longinput[:, point_read:point_read+L]
+            point_read += L
+        else:
+            ll = len_input - point_read
+            block_in[:, 0, -L:-L+ll] = longinput[:, point_read:]
+            block_in[:, 0, -L+ll:] = 0
+            point_read += ll
+        
+        # convolution
+        block_in_f = np.fft.rfft(block_in, n=N)
+        block_out_f = np.matmul(
+                fir_f.transpose(2, 0, 1), block_in_f.transpose(2, 0, 1)
+                ).transpose(1, 2, 0)
+        block_out = np.fft.irfft(block_out_f)[:, 0, -L:]
+        
+        # write output
+        if (len_out - out_cnt) >= L:
+            out[:, out_cnt:out_cnt+L] = block_out
+            out_cnt += L
+        else:
+            out[:, out_cnt:] = block_out[:, :len_out - out_cnt]
+            out_cnt = len_out
+
+        if verbose:
+            pg.bar()
+    
+    return out
+
+

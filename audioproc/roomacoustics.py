@@ -32,55 +32,14 @@ def arg_decay(decaycurve, att, start=0, relative=False):
     return i
 
 
-def arg_attenuate(decaycurve, att, start=0, relative=False):
-    '''
-    returns the smallest index of the element below "-att" in the decay-curve,
-    and returns -1 if there are no elements under "-att".
-    
-    * The decay-curve is monotonically decreasing.
-    * search range is right of "start".
-    * If "relative" is set to True, search for an index that
-      attenuates att based on the attenuation of start.
-    '''
-    
-    if relative:
-        target = decaycurve[start] - att
-    else:
-        target = -att
-
-    if np.max(decaycurve) <= target:
-        return start
-    elif np.min(decaycurve) > target:
-        return -1
-
-    L = len(decaycurve) - 1
-    i = start + (L - start) // 2
-    
-    step = (L - start) // 4
-    while step > 0:
-        if decaycurve[i] > target:
-            i += step
-        else:
-            i -= step
-        step = step // 2
-    
-    while decaycurve[i] < target:
-        i -= 1
-    
-    while decaycurve[i] > target:
-        i += 1
-        
-    return i
-
-
 def calc_RT(decaycurve, att1=5, att2=35, fs=48000):
     '''
     reverberation time
     '''
 
     # line fitting
-    i1 = arg_attenuate(decaycurve, att1)
-    i2 = arg_attenuate(decaycurve, att2, start=i1)
+    i1 = arg_decay(decaycurve, att1)
+    i2 = arg_decay(decaycurve, att2, start=i1)
     x = np.arange(i1, i2)
     tilt, intercept = np.polyfit(x, decaycurve[i1:i2], 1)
     

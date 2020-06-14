@@ -9,6 +9,29 @@ def calc_decaycurve(ir, integ_lim=-1):
     return decay
 
 
+def arg_decay(decaycurve, att, start=0, relative=False):
+    '''
+    returns i that gives decaycurve[i-1] < -att <= decaycurve[i],
+    and returns -1 if there are no elements under "-att".
+
+    * The decay-curve must be monotonically decreasing.
+    * search range is right of "start".
+    * If "relative" is set to True, search -att relative to decaycurve[start].
+    '''
+
+    if relative:
+        target = decaycurve[start] - att
+    else:
+        target = -att
+
+    if decaycurve[-1] > target:
+        return -1
+
+    i = decaycurve.size - np.searchsorted(
+            decaycurve[start:][::-1], target, 'right')
+    return i
+
+
 def arg_attenuate(decaycurve, att, start=0, relative=False):
     '''
     returns the smallest index of the element below "-att" in the decay-curve,

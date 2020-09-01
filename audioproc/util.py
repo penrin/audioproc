@@ -34,26 +34,37 @@ class ProgressBar():
         percent = percent / end
 
         if self.countdown == True:
-            progress = percent - self.start_parcent
             
-            if self.start_time == None:
-                self.start_time = time.perf_counter()
-                self.start_parcent = percent
-                remain = 'Remain --:--:--'
-                
-            elif progress == 0:
-                remain = 'Remain --:--:--'
-            
-            elif progress != 0:
-                elapsed_time = time.perf_counter() - self.start_time
+            if percent < 1:
+
                 progress = percent - self.start_parcent
-                remain_t = (elapsed_time / progress) * (1 - percent)
-                remain_t = ceil(remain_t)
-                h = remain_t // 3600
-                m = remain_t % 3600 // 60
-                s = remain_t % 60
-                remain = 'Remain %02d:%02d:%02d' % (h, m, s) 
                 
+                if self.start_time == None:
+                    self.start_time = time.perf_counter()
+                    self.start_parcent = percent
+                    remain = 'Remain --:--:--'
+                    
+                elif progress == 0:
+                    remain = 'Remain --:--:--'
+
+                elif progress != 0:
+                    elapsed_time = time.perf_counter() - self.start_time
+                    progress = percent - self.start_parcent
+                    remain_t = (elapsed_time / progress) * (1 - percent)
+                    remain_t = ceil(remain_t)
+                    h = remain_t // 3600
+                    m = remain_t % 3600 // 60
+                    s = remain_t % 60
+                    remain = 'Remain %02d:%02d:%02d' % (h, m, s) 
+
+            else:
+                elapsed_time = time.perf_counter() - self.start_time
+                elapsed_time = ceil(elapsed_time)
+                h = elapsed_time // 3600
+                m = elapsed_time % 3600 // 60
+                s = elapsed_time % 60
+                remain = 'Elapsed %02d:%02d:%02d' % (h, m, s)
+
         else:
             remain = ''
         
@@ -123,15 +134,16 @@ def id(x):
 
 
 
-
 if __name__ == '__main__':
     
+    # progress bar demo
     N = 100
     pg = ProgressBar2(N)
     for n in range(N):    
         time.sleep(0.02)
         pg.bar()
     
+    # propeller demo
     print()
     print('Propeller...', end='')
     p = Propeller()
@@ -139,4 +151,3 @@ if __name__ == '__main__':
     time.sleep(3)
     p.end()
     
-        

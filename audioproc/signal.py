@@ -271,3 +271,19 @@ def conv_lessmemory_fdomfir(longinput, rfft_fir, ntaps_fir, verbose=False):
     return out
 
 
+
+# combine two MIMO FIR
+# shape of fir1 and fir2 -> (out-ch, in-ch, taps)
+# return fir2 @ fir1
+def combine_fir(fir1, fir2):
+    len_new = fir1.shape[-1] + fir2.shape[-1] - 1
+    fftpt = 2 ** ap.nextpow2(len_new)
+    fir1_f = np.fft.rfft(fir1, n=fftpt)
+    fir2_f = np.fft.rfft(fir2, n=fftpt)
+    new_f = np.matmul(
+            fir2_f.transpose(2, 0, 1), fir1_f.transpose(2, 0, 1)
+            ).transpose(1, 2, 0)
+    new = np.fft.irfft(new_f)[:, :, :len_new]
+    return new
+
+
